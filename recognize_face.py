@@ -4,16 +4,21 @@ import cv2
 
 # ---------------------------Recognize face----------------------------------------------------
 class RecognizeFace:
-    def __init__(self):
+    def __init__(self, department, year, semester):
         self.cascade_path = 'C:\\Users\\LENOVO\\PycharmProjects\\face_recognition_demo\\venv\\' \
                              'Lib\\site-packages\\cv2\\data\\haarcascade_frontalface_alt.xml'
+        self.department = department
+        self.year = year
+        self.semester = semester
         self.font = cv2.FONT_HERSHEY_DUPLEX
         self.face_cascade = cv2.CascadeClassifier(self.cascade_path)
         self.recognizer = cv2.face.LBPHFaceRecognizer_create()
-        self.recognizer.read("yml/trainingdata.yml")
+        self.train_data_path = 'yml//'+self.department+'\\'+self.year+'\\'+self.semester+'\\'
+        self.recognizer.read(self.train_data_path+"trainingdata.yml")
         self.camera = cv2.VideoCapture(0)
-        self.path = 'images//'
+        self.path = 'images//'+self.department+'\\'+self.year+'\\'+self.semester+'\\'
         self.names = []
+        self.detected_name = []
 
     def get_name_list(self):
         for directories, subdirectories, filenames in os.walk(self.path):
@@ -31,7 +36,13 @@ class RecognizeFace:
                     id_no, confidence = self.recognizer.predict(gray[y:y+h, x:x+w])
                     conf = int((100 * (1 - confidence / 300)))
                     # text1 = '%s' % (name[id_no - 1].split('_')[-1])
-                    text1 = '%s %d' % (self.names[id_no], id_no)
+
+                    for i in self.names:
+                        if int(i.split('-')[-1]) == id_no:
+                            n_list = i.split('-')[:-1]
+                            self.detected_name = ' '.join(n_list)
+
+                    text1 = '%s %d' % (self.detected_name, id_no)
                     text2 = 'confidence=%d' % conf
                     if conf >= 77:
                         cv2.putText(frame, text1, (x, y - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)

@@ -1,22 +1,57 @@
 import mysql.connector as ms
 
-uname = "sumit"
-password = "sumit123"
 
-try:
-    conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_test')
-    cursor = conn.cursor()
-    # query = "INSERT INTO login_table VALUES ('%s', '%s')" % (uname, password)
-    select_query = "SELECT username FROM login_table"
-    print(select_query)
-    cursor.execute(select_query)
-    result = cursor.fetchall()
-    print(f"{result}")
-    for x in result:
-        print(x)
-    conn.commit()
-    conn.close()
-    print('Done')
-except ms.Error as e:
-    print('Could not connect to the database.')
-    print(f'{e}')
+def insert_data(values_list):
+    is_success = False
+    try:
+        conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_database')
+        cursor = conn.cursor()
+        query = "INSERT INTO student_table VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        val = (values_list[0], values_list[1], values_list[2], values_list[3], values_list[4], values_list[5],
+               values_list[6], values_list[7], values_list[8],  values_list[9], values_list[10])
+        cursor.execute(query, val)
+        conn.commit()
+        conn.close()
+        is_success = True
+        return is_success
+    except ms.Error as err:
+        print(f'Error: {err}')
+        conn.close()
+        return is_success
+
+
+def update_data(values_list):
+    is_success = False
+    try:
+        conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_database')
+        cursor = conn.cursor()
+        query = "UPDATE student_table SET roll_no=%s, full_name=%s, gender=%s, date_of_birth=%s, email=%s, phone=%s," \
+                " address=%s, parent_email=%s, department_name=%s, year=%s, semester=%s WHERE roll_no=%s"
+        val = (values_list[0], values_list[1], values_list[2], values_list[3], values_list[4], values_list[5],
+               values_list[6], values_list[7], values_list[8],  values_list[9], values_list[10], values_list[0])
+        cursor.execute(query, val)
+        conn.commit()
+        conn.close()
+        is_success = True
+        return is_success
+    except ms.Error as err:
+        print(f'Error: {err}')
+        conn.close()
+        return is_success
+
+
+def delete_data(roll):
+    is_success = False
+    try:
+        conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_database')
+        cursor = conn.cursor()
+        query = "DELETE FROM student_table WHERE roll_no="+roll
+        cursor.execute(query)
+        conn.commit()
+        conn.close()
+        is_success = True
+        return is_success
+    except ms.Error as err:
+        print(f'Error: {err}')
+        conn.close()
+        return is_success

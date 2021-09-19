@@ -1,4 +1,7 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QMessageBox, QStackedWidget, QTextEdit
+from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QMessageBox, QStackedWidget, QTextEdit, \
+    QComboBox, QDateEdit, QTableWidget, QTableWidgetItem
+# For changing Pydate to Qdate
+from PyQt5.QtCore import QDate
 
 from PyQt5 import uic
 import sys
@@ -7,6 +10,9 @@ import os
 import train_algo
 import recognize_face
 import smtp_email
+import database_connection_test
+import mysql.connector as ms
+import generate_image
 
 
 class DashboardForm(QWidget):
@@ -33,6 +39,7 @@ class DashboardForm(QWidget):
         self.stack_pages_notify_guardian_page = self.findChild(QWidget, "notify_guardian_page")
         self.stack_pages_attendance_report_page = self.findChild(QWidget, "attendance_report_page")
         self.stack_pages_recognize_face_page = self.findChild(QWidget, "recognize_face_page")
+        self.stack_pages_attendance_info_page = self.findChild(QWidget, "attendance_info_page")
         # Get the buttons in stackWidget
         self.dashboard_pushButton = self.findChild(QPushButton, 'pushButton')
         self.dashboard_pushButton_2 = self.findChild(QPushButton, 'pushButton_2')
@@ -40,6 +47,7 @@ class DashboardForm(QWidget):
         self.dashboard_pushButton_4 = self.findChild(QPushButton, 'pushButton_4')
         self.dashboard_pushButton_5 = self.findChild(QPushButton, 'pushButton_5')
         self.dashboard_pushButton_6 = self.findChild(QPushButton, 'pushButton_6')
+        self.dashboard_pushButton_9 = self.findChild(QPushButton, 'pushButton_9')
         # Set the first page of Stack Widget.
         self.stack_pages.setCurrentWidget(self.stack_pages_student_info_page)
         # Signals generated in stack widget page.
@@ -49,6 +57,7 @@ class DashboardForm(QWidget):
         self.dashboard_pushButton_4.clicked.connect(self.open_recognize_face_page)
         self.dashboard_pushButton_5.clicked.connect(self.open_notify_guardian_page)
         self.dashboard_pushButton_6.clicked.connect(self.open_attendance_report_page)
+        self.dashboard_pushButton_9.clicked.connect(self.open_attendance_info_page)
         # Signals generated to open photo.
         self.photo_button.clicked.connect(self.open_photo)
         # Signals generated to train algorithm.
@@ -58,44 +67,295 @@ class DashboardForm(QWidget):
         # Signals generated to send email
         self.send_mail_button.clicked.connect(self.send_mail)
 
+        # Find the elements in the student info page.
+        self.roll_no_line_edit = self.findChild(QLineEdit, 'roll_no_line_edit')
+        self.full_name_line_edit = self.findChild(QLineEdit, 'full_name_line_edit')
+        self.gender_combo_box = self.findChild(QComboBox, 'gender_combo_box')
+        self.date_of_birth_date_edit = self.findChild(QDateEdit, 'date_of_birth_date_edit')
+        self.email_line_edit = self.findChild(QLineEdit, 'email_line_edit')
+        self.phone_line_edit = self.findChild(QLineEdit, 'phone_line_edit')
+        self.address_line_edit = self.findChild(QLineEdit, 'address_line_edit')
+        self.parent_email_line_edit = self.findChild(QLineEdit, 'parent_email_line_edit')
+        self.department_combo_box = self.findChild(QComboBox, 'department_combo_box')
+        self.year_combo_box = self.findChild(QComboBox, 'year_combo_box')
+        self.semester_combo_box = self.findChild(QComboBox, 'semester_combo_box')
+        self.take_photo_button = self.findChild(QPushButton, 'take_photo_button')
+        self.save_button = self.findChild(QPushButton, 'save_button')
+        self.update_button = self.findChild(QPushButton, 'update_button')
+        self.delete_button = self.findChild(QPushButton, 'delete_button')
+        self.reset_button = self.findChild(QPushButton, 'reset_button')
+        self.database_table = self.findChild(QTableWidget, 'database_table')
+        self.search_line_edit = self.findChild(QLineEdit, 'search_line_edit')
+        self.search_by_combo_box = self.findChild(QComboBox, 'search_by_combo_box')
+        self.search_button = self.findChild(QPushButton, 'search_button')
+        self.refresh_button = self.findChild(QPushButton, 'refresh_button')
+
+        # Find the elements in train algo page:
+        self.train_department_combo_box = self.findChild(QComboBox, 'train_department_combo_box')
+        self.train_year_combo_box = self.findChild(QComboBox, 'train_year_combo_box')
+        self.train_semester_combo_box = self.findChild(QComboBox, 'train_semester_combo_box')
+
+        # Find the elements in open photo page:
+        self.photo_department_combo_box = self.findChild(QComboBox, 'photo_department_combo_box')
+        self.photo_year_combo_box = self.findChild(QComboBox, 'photo_year_combo_box')
+        self.photo_semester_combo_box = self.findChild(QComboBox, 'photo_semester_combo_box')
+
+        # Find the elements in recognize page:
+        self.recognize_department_combo_box = self.findChild(QComboBox, 'recognize_department_combo_box')
+        self.recognize_year_combo_box = self.findChild(QComboBox, 'recognize_year_combo_box')
+        self.recognize_semester_combo_box = self.findChild(QComboBox, 'recognize_semester_combo_box')
+
+        # Signals generated in student info page
+        self.save_button.clicked.connect(self.save_info)
+        self.update_button.clicked.connect(self.update_info)
+        self.delete_button.clicked.connect(self.delete_info)
+        self.reset_button.clicked.connect(self.reset_info)
+        self.take_photo_button.clicked.connect(self.take_photo)
+        self.database_table.cellClicked.connect(self.cell_was_clicked)
+        self.search_button.clicked.connect(self.search_info)
+        self.refresh_button.clicked.connect(self.refresh_info)
+
+        # Display table value on start up
+        self.refresh_info()
+
+    # Student info page functions:
+
     def open_student_info_page(self):
         self.stack_pages.setCurrentWidget(self.stack_pages_student_info_page)
+
+    def save_info(self):
+        roll_no = self.roll_no_line_edit.text()
+        full_name = self.full_name_line_edit.text()
+        gender = self.gender_combo_box.currentText()
+        dob = self.date_of_birth_date_edit.date().toPyDate()
+        email = self.email_line_edit.text()
+        phone = self.phone_line_edit.text()
+        address = self.address_line_edit.text()
+        parent_email = self.parent_email_line_edit.text()
+        department = self.department_combo_box.currentText()
+        year = self.year_combo_box.currentText()
+        semester = self.semester_combo_box.currentText()
+        if roll_no and full_name and email and phone and address and parent_email and gender and department and year \
+                and semester:
+            insert_values = [roll_no, full_name.title(), gender, dob, email, phone, address.title(), parent_email,
+                             department, year, semester]
+            is_complete = database_connection_test.insert_data(insert_values)
+            if is_complete:
+                QMessageBox.information(self, self.messagebox_title,
+                                        "Information has been added successfully!")
+                self.refresh_info()
+                self.reset_info()
+            else:
+                QMessageBox.information(self, self.messagebox_title, "Please check your roll no value.")
+        else:
+            QMessageBox.information(self, self.messagebox_title, "Please fill all the values")
+
+    def update_info(self):
+        roll_no = self.roll_no_line_edit.text()
+        full_name = self.full_name_line_edit.text()
+        gender = self.gender_combo_box.currentText()
+        dob = self.date_of_birth_date_edit.date().toPyDate()
+        email = self.email_line_edit.text()
+        phone = self.phone_line_edit.text()
+        address = self.address_line_edit.text()
+        parent_email = self.parent_email_line_edit.text()
+        department = self.department_combo_box.currentText()
+        year = self.year_combo_box.currentText()
+        semester = self.semester_combo_box.currentText()
+        if roll_no and full_name and email and phone and address and parent_email and gender and department and year \
+                and semester:
+            update_values = [roll_no, full_name.title(), gender, dob, email, phone, address.title(), parent_email,
+                             department, year, semester]
+            is_complete = database_connection_test.update_data(update_values)
+            if is_complete:
+                QMessageBox.information(self, self.messagebox_title,
+                                        "Information has been updated successfully!")
+                self.refresh_info()
+                self.reset_info()
+            else:
+                QMessageBox.information(self, self.messagebox_title, "Sorry! Please check the values properly")
+        else:
+            QMessageBox.information(self, self.messagebox_title, "Please fill all the values")
+
+    def delete_info(self):
+        roll_no = self.roll_no_line_edit.text()
+        if roll_no:
+            ret = QMessageBox.warning(self, self.messagebox_title, "Are you sure you want to delete these data?",
+                                      QMessageBox.Ok | QMessageBox.No)
+            if ret == QMessageBox.Ok:
+                is_complete = database_connection_test.delete_data(roll_no)
+                if is_complete:
+                    QMessageBox.information(self, self.messagebox_title,
+                                            "Information has been deleted successfully!")
+                    self.refresh_info()
+                    self.reset_info()
+        else:
+            QMessageBox.information(self, self.messagebox_title, "Please select any one of the data")
+
+    def reset_info(self):
+        self.roll_no_line_edit.setText('')
+        self.full_name_line_edit.setText('')
+        self.gender_combo_box.setCurrentIndex(0)
+        self.email_line_edit.setText('')
+        self.phone_line_edit.setText('')
+        self.address_line_edit.setText('')
+        self.parent_email_line_edit.setText('')
+        self.department_combo_box.setCurrentIndex(0)
+        self.year_combo_box.setCurrentIndex(0)
+        self.semester_combo_box.setCurrentIndex(0)
+        self.search_line_edit.setText('')
+        self.search_by_combo_box.setCurrentIndex(0)
+
+    def take_photo(self):
+        roll_no = self.roll_no_line_edit.text()
+        full_name = self.full_name_line_edit.text()
+        department = self.department_combo_box.currentText()
+        year = self.year_combo_box.currentText()
+        semester = self.semester_combo_box.currentText()
+        if roll_no and full_name and department and year and semester:
+            is_complete = generate_image.generate_photo(roll_no, full_name.title(), department, year, semester)
+            if is_complete:
+                QMessageBox.information(self, self.messagebox_title,
+                                        "Sample photo taken successfully. Save the information")
+            else:
+                QMessageBox.information(self, self.messagebox_title, "Something went wrong.")
+        else:
+            QMessageBox.information(self, self.messagebox_title,
+                                    "Please fill above information first.")
+
+    def refresh_info(self):
+        try:
+            self.database_table.setRowCount(0);
+            conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_database')
+            cursor = conn.cursor()
+            query = "SELECT * FROM student_table"
+            cursor.execute(query)
+            result = cursor.fetchall()
+            for row_number, row_data in enumerate(result):
+                self.database_table.insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    self.database_table.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+            conn.close()
+        except Exception as err:
+            print(f"Error: {err}")
+
+    def cell_was_clicked(self, row, column):
+        values = []
+        for i in range(11):
+            item = self.database_table.item(row, i)
+            values.append(item.text())
+
+        # Setting the values of line edit after cell of table is clicked.
+        self.roll_no_line_edit.setText(values[0])
+        self.full_name_line_edit.setText(values[1])
+        index = self.gender_combo_box.findText(values[2])
+        if index >= 0:
+            self.gender_combo_box.setCurrentIndex(index)
+        date = [int(i) for i in values[3].split('-')]
+        self.date_of_birth_date_edit.setDate(QDate(date[0], date[1], date[2]))
+        self.email_line_edit.setText(values[4])
+        self.phone_line_edit.setText(values[5])
+        self.address_line_edit.setText(values[6])
+        self.parent_email_line_edit.setText(values[7])
+        index = self.department_combo_box.findText(values[8])
+        if index >= 0:
+            self.department_combo_box.setCurrentIndex(index)
+        index = self.year_combo_box.findText(values[9])
+        if index >= 0:
+            self.year_combo_box.setCurrentIndex(index)
+        index = self.semester_combo_box.findText(values[10])
+        if index >= 0:
+            self.semester_combo_box.setCurrentIndex(index)
+
+    def search_info(self):
+        search = self.search_line_edit.text()
+        search_by = self.search_by_combo_box.currentText()
+        if search_by and search:
+            try:
+                self.database_table.setRowCount(0);
+                conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_database')
+                cursor = conn.cursor()
+                query = "SELECT * FROM student_table WHERE %s LIKE '%s'" % (search_by, search)
+                cursor.execute(query)
+                result = cursor.fetchall()
+                for row_number, row_data in enumerate(result):
+                    self.database_table.insertRow(row_number)
+                    for column_number, data in enumerate(row_data):
+                        self.database_table.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+                conn.close()
+            except Exception as err:
+                print(f"Error: {err}")
+        else:
+            QMessageBox.information(self, self.messagebox_title, "Please fill all the fields.")
+
+    # Train Data page functions:
 
     def open_train_data_page(self):
         self.stack_pages.setCurrentWidget(self.stack_pages_train_data_page)
 
     def train_data(self):
-        try:
-            train = train_algo.TrainAlgo()
-            train.perform_training()
-            QMessageBox.information(self, self.messagebox_title,
-                                    "Algorithm Trained. Proceed to Recognize Face!")
-        except Exception as e:
-            print(f'{e}')
+        train_department = self.train_department_combo_box.currentText()
+        train_year = self.train_year_combo_box.currentText()
+        train_semester = self.train_semester_combo_box.currentText()
+        if train_department and train_year and train_semester:
+            test_path = 'images\\' + train_department + '\\' + train_year + '\\' + train_semester
+            if os.path.exists(test_path):
+                try:
+                    train = train_algo.TrainAlgo()
+                    train.perform_training(train_department, train_year, train_semester)
+                    QMessageBox.information(self, self.messagebox_title,
+                                            "Algorithm Trained. Proceed to Recognize Face!")
+                except Exception as e:
+                    print(f'{e}')
+            else:
+                QMessageBox.information(self, self.messagebox_title,
+                                        "No images found to train")
+        else:
+            QMessageBox.information(self, self.messagebox_title, "Fill all the fields")
 
+    # open image page functions:
     def open_photo_page(self):
         self.stack_pages.setCurrentWidget(self.stack_pages_photo_page)
 
     def open_photo(self):
-        student_name = self.search_text.text()
-        path = 'C:\\Users\\LENOVO\\PycharmProjects\\face_recognition_demo_final\\images\\' + student_name
-        if os.path.exists(path):
-            webbrowser.open(path)
+        photo_department = self.photo_department_combo_box.currentText()
+        photo_year = self.photo_year_combo_box.currentText()
+        photo_semester = self.photo_semester_combo_box.currentText()
+        student_name = self.search_text.text().title()
+        if photo_department and photo_year and photo_semester:
+            path = 'C:\\Users\\LENOVO\\PycharmProjects\\face_recognition_ui\\images\\' \
+                   + photo_department + '\\' + photo_year + '\\' + photo_semester + '\\' + student_name
+            if os.path.exists(path):
+                webbrowser.open(path)
+            else:
+                QMessageBox.warning(self, self.messagebox_title, "No Students Found!")
         else:
-            QMessageBox.warning(self, self.messagebox_title, "No Students Found!")
+            QMessageBox.information(self, self.messagebox_title, "Fill all the fields")
 
+    # Recognize page functions:
     def open_recognize_face_page(self):
         self.stack_pages.setCurrentWidget(self.stack_pages_recognize_face_page)
 
     def recognize_face(self):
-        try:
-            recognize = recognize_face.RecognizeFace()
-            recognize.get_name_list()
-            recognize.perform_face_recognition()
-        except Exception as e:
-            print("error")
-            print(f'{e}')
+        recognize_department = self.recognize_department_combo_box.currentText()
+        recognize_year = self.recognize_year_combo_box.currentText()
+        recognize_semester = self.recognize_semester_combo_box.currentText()
+        if recognize_department and recognize_year and recognize_semester:
+            required_path = 'images//' + recognize_department + '\\' + recognize_year + '\\' + recognize_semester
+            if os.path.exists(required_path):
+                try:
+                    recognize = recognize_face.RecognizeFace(recognize_department, recognize_year, recognize_semester)
+                    recognize.get_name_list()
+                    recognize.perform_face_recognition()
+                except Exception as e:
+                    print("error")
+                    print(f'{e}')
+            else:
+                QMessageBox.information(self, self.messagebox_title, "Sorry, no files found")
+        else:
+            QMessageBox.information(self, self.messagebox_title, "Please select the required fields.")
 
+    # Notify Guardian Page functions:
     def open_notify_guardian_page(self):
         self.stack_pages.setCurrentWidget(self.stack_pages_notify_guardian_page)
 
@@ -105,14 +365,15 @@ class DashboardForm(QWidget):
             subject = self.subject_line_edit.text()
             main_body = self.mail_content_edit.toPlainText()
             is_empty = False
-            if receiver_email == '' or subject == '' or main_body == '':
+            if receiver_email == '' and subject == '' and main_body == '':
                 QMessageBox.warning(self, self.messagebox_title, "Please enter value for all fields")
                 is_empty = True
 
             if not is_empty:
                 send = smtp_email.SendEmail(receiver_email, subject, main_body)
                 send.send_email()
-                QMessageBox.information(self, 'Face Recognition Attendance System', 'The mail has been sent successfully!')
+                QMessageBox.information(self, 'Face Recognition Attendance System',
+                                        'The mail has been sent successfully!')
                 self.to_line_edit.setText('')
                 self.subject_line_edit.setText('')
                 self.mail_content_edit.setPlainText('')
@@ -120,8 +381,13 @@ class DashboardForm(QWidget):
             print("error")
             print(f'{e}')
 
+    # Attendance Report page functions:
     def open_attendance_report_page(self):
         self.stack_pages.setCurrentWidget(self.stack_pages_attendance_report_page)
+
+    # Attendance Info page functions:
+    def open_attendance_info_page(self):
+        self.stack_pages.setCurrentWidget(self.stack_pages_attendance_info_page)
 
 
 if __name__ == '__main__':
