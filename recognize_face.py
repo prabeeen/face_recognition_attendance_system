@@ -18,7 +18,9 @@ class RecognizeFace:
         self.camera = cv2.VideoCapture(0)
         self.path = 'images//'+self.department+'\\'+self.year+'\\'+self.semester+'\\'
         self.names = []
-        self.detected_name = []
+        self.detected_name = ''
+        self.id_to_return = 0
+        self.name_to_return = ''
 
     def get_name_list(self):
         for directories, subdirectories, filenames in os.walk(self.path):
@@ -47,12 +49,17 @@ class RecognizeFace:
                     if conf >= 77:
                         cv2.putText(frame, text1, (x, y - 15), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
                         cv2.putText(frame, text2, (x, y - 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+                        self.id_to_return = id_no
+                        self.name_to_return = self.detected_name
                     else:
                         text = 'unknown image'
                         cv2.putText(frame, text, (x, y - 20), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)
+                        self.id_to_return = 'NULL'
+                        self.name_to_return = 'Unknown'
                 cv2.imshow('Face Recognition', frame)
         self.camera.release()
         cv2.destroyAllWindows()
+        return self.id_to_return, self.name_to_return
 
 
 if __name__ == '__main__':

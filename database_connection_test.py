@@ -55,3 +55,38 @@ def delete_data(roll):
         print(f'Error: {err}')
         conn.close()
         return is_success
+
+
+def get_course(values_list):
+    is_success = False
+    try:
+        conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_database')
+        cursor = conn.cursor()
+        query = "SELECT course FROM department_table WHERE department_name='%s' AND year='%s' AND semester='%s'"\
+                % (values_list[0], values_list[1], values_list[2])
+        cursor.execute(query)
+        result = cursor.fetchall()
+        conn.close()
+        is_success = True
+        return is_success, result
+    except ms.Error as err:
+        print(f'Error: {err}')
+        conn.close()
+        return is_success
+
+
+def attendance_add(roll, course, date):
+    is_success = False
+    try:
+        conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_database')
+        cursor = conn.cursor()
+        query = "INSERT INTO attendance_table VALUES ('%s', '%s', '%s', 'P')" % (roll, course, date)
+        cursor.execute(query)
+        conn.commit()
+        conn.close()
+        is_success = True
+        return is_success
+    except ms.Error as err:
+        print(f'Error: {err}')
+        conn.close()
+        return is_success

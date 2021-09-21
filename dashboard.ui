@@ -423,7 +423,7 @@ QPushButton::hover
     <string notr="true">background-color: rgb(220, 228, 254);</string>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>6</number>
    </property>
    <widget class="QWidget" name="train_data_page">
     <widget class="QPushButton" name="train_pushbutton">
@@ -1613,6 +1613,53 @@ QPushButton::hover
       <string>Send</string>
      </property>
     </widget>
+    <widget class="QWidget" name="verticalLayoutWidget_5">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>120</y>
+       <width>511</width>
+       <height>491</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_11">
+      <item>
+       <widget class="QTableWidget" name="notify_table">
+        <property name="alternatingRowColors">
+         <bool>true</bool>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <column>
+         <property name="text">
+          <string>Roll No</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Full Name</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Course</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Date</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Status</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
    <widget class="QWidget" name="attendance_report_page">
     <widget class="QLabel" name="label_7">
@@ -1638,10 +1685,10 @@ QPushButton::hover
     <widget class="QPushButton" name="recognize_face_button">
      <property name="geometry">
       <rect>
-       <x>331</x>
-       <y>310</y>
+       <x>330</x>
+       <y>330</y>
        <width>221</width>
-       <height>61</height>
+       <height>51</height>
       </rect>
      </property>
      <property name="font">
@@ -1669,9 +1716,9 @@ QPushButton::hover
      <property name="geometry">
       <rect>
        <x>180</x>
-       <y>190</y>
+       <y>150</y>
        <width>521</width>
-       <height>86</height>
+       <height>92</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -1811,28 +1858,222 @@ QPushButton::hover
       </item>
      </layout>
     </widget>
-   </widget>
-   <widget class="QWidget" name="attendance_info_page">
-    <widget class="QLabel" name="label">
+    <widget class="QWidget" name="horizontalLayoutWidget_8">
      <property name="geometry">
       <rect>
-       <x>420</x>
+       <x>20</x>
+       <y>0</y>
+       <width>160</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_8">
+      <item>
+       <widget class="QLabel" name="recognize_date_label">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Date: </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="recognize_date_value">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>date_value</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="horizontalLayoutWidget_9">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>40</y>
+       <width>181</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_9">
+      <item>
+       <widget class="QDateEdit" name="recognize_date_edit">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="displayFormat">
+         <string>yyyy-MM-dd</string>
+        </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="recognize_change_date_button">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+	background-color: rgb(64, 66, 226);
+	color: rgb(255, 255, 255);
+}
+
+QPushButton::hover
+{
+	background-color:rgb(0, 170, 0);
+}</string>
+        </property>
+        <property name="text">
+         <string>Change</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="verticalLayoutWidget_3">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
        <y>260</y>
-       <width>271</width>
-       <height>61</height>
+       <width>160</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_9">
+      <item>
+       <widget class="QLabel" name="label_17">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Course:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="recognize_course_combo_box"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QPushButton" name="recognize_show_course_button">
+     <property name="geometry">
+      <rect>
+       <x>710</x>
+       <y>212</y>
+       <width>101</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>Arial</family>
-       <pointsize>14</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
+       <pointsize>10</pointsize>
       </font>
      </property>
-     <property name="text">
-      <string>Attendance Information</string>
+     <property name="styleSheet">
+      <string notr="true">QPushButton
+{
+	background-color: rgb(64, 66, 226);
+	color: rgb(255, 255, 255);
+}
+
+QPushButton::hover
+{
+	background-color:rgb(0, 170, 0);
+}</string>
      </property>
+     <property name="text">
+      <string>Show Courses</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="attendance_info_page">
+    <widget class="QWidget" name="verticalLayoutWidget_4">
+     <property name="geometry">
+      <rect>
+       <x>-1</x>
+       <y>-1</y>
+       <width>971</width>
+       <height>421</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_10">
+      <item>
+       <widget class="QTableWidget" name="attendance_table">
+        <property name="alternatingRowColors">
+         <bool>true</bool>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <column>
+         <property name="text">
+          <string>Roll No</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Full Name</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Department Name</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Year</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Semester</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Course</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Date</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Status</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
   </widget>
