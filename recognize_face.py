@@ -51,6 +51,9 @@ class RecognizeFace:
                         cv2.putText(frame, text2, (x, y - 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
                         self.id_to_return = id_no
                         self.name_to_return = self.detected_name
+                        self.camera.release()
+                        cv2.destroyAllWindows()
+                        return self.id_to_return, self.name_to_return
                     else:
                         text = 'unknown image'
                         cv2.putText(frame, text, (x, y - 20), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255), 2)

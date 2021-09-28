@@ -75,7 +75,7 @@ def get_course(values_list):
         return is_success
 
 
-def attendance_add(roll, course, date):
+def add_attendance(roll, course, date):
     is_success = False
     try:
         conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_database')
@@ -89,4 +89,21 @@ def attendance_add(roll, course, date):
     except ms.Error as err:
         print(f'Error: {err}')
         conn.close()
-        return is_success
+        return err
+
+
+def save_to_complete_table(result):
+    try:
+        conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_database')
+        cursor = conn.cursor()
+        for row in result:
+            query = "INSERT INTO attendance_complete_table VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+            val = (row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
+            cursor.execute(query, val)
+            conn.commit()
+        conn.close()
+    except ms.Error as err:
+        print(f'Error here: {err}')
+        conn.close()
+        return err
+

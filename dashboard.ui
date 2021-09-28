@@ -1516,12 +1516,12 @@ QPushButton::hover
       <string>SEARCH</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_2">
+    <widget class="QLineEdit" name="notify_guardian_search_line_edit">
      <property name="geometry">
       <rect>
        <x>160</x>
        <y>40</y>
-       <width>291</width>
+       <width>241</width>
        <height>21</height>
       </rect>
      </property>
@@ -1659,6 +1659,56 @@ QPushButton::hover
        </widget>
       </item>
      </layout>
+    </widget>
+    <widget class="QWidget" name="horizontalLayoutWidget_13">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>70</y>
+       <width>291</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_13">
+      <item>
+       <widget class="QRadioButton" name="notify_guardian_roll_no_radio_button">
+        <property name="text">
+         <string>Roll No</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="notify_guardian_full_name_radio_button">
+        <property name="text">
+         <string>Full Name</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QPushButton" name="notify_guardian_search_button">
+     <property name="geometry">
+      <rect>
+       <x>420</x>
+       <y>40</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton
+{
+	background-color: rgb(64, 66, 226);
+	color: rgb(255, 255, 255);
+}
+QPushButton::hover
+{
+	background-color: rgb(0, 170, 0);
+}</string>
+     </property>
+     <property name="text">
+      <string>Search</string>
+     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="attendance_report_page">
@@ -2018,8 +2068,8 @@ QPushButton::hover
       <rect>
        <x>-1</x>
        <y>-1</y>
-       <width>971</width>
-       <height>421</height>
+       <width>821</width>
+       <height>341</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -2074,6 +2124,462 @@ QPushButton::hover
        </widget>
       </item>
      </layout>
+    </widget>
+    <widget class="QWidget" name="verticalLayoutWidget_6">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>540</y>
+       <width>181</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_12">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Please save all at the end.</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="attendance_info_save_all_button">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+	background-color: rgb(64, 66, 226);
+	color: rgb(255, 255, 255);
+}
+QPushButton::hover
+{
+	background-color: rgb(0, 170, 0);
+}</string>
+        </property>
+        <property name="text">
+         <string>Save All</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="verticalLayoutWidget_7">
+     <property name="geometry">
+      <rect>
+       <x>660</x>
+       <y>500</y>
+       <width>231</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_13">
+      <item>
+       <widget class="QLabel" name="label_18">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Export as Excel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="attendance_info_export_button">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+	background-color: rgb(64, 66, 226);
+	color: rgb(255, 255, 255);
+}
+QPushButton::hover
+{
+	background-color: rgb(0, 170, 0);
+}</string>
+        </property>
+        <property name="text">
+         <string>Export</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="horizontalLayoutWidget_10">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>370</y>
+       <width>451</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_10">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_18">
+        <item>
+         <widget class="QLabel" name="label_22">
+          <property name="font">
+           <font>
+            <family>Arial</family>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Department</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="attendance_info_department_combo_box">
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Computer Engineering</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Civil Engineering</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>IT Engineering</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Software Engineering</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_17">
+        <item>
+         <widget class="QLabel" name="label_20">
+          <property name="font">
+           <font>
+            <family>Arial</family>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Year</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="attendance_info_year_combo_box">
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>1</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>2</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>3</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>4</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_14">
+        <item>
+         <widget class="QLabel" name="label_19">
+          <property name="font">
+           <font>
+            <family>Arial</family>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Semester</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="attendance_info_semester_combo_box">
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>1</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>2</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_15">
+        <item>
+         <widget class="QPushButton" name="attendance_info_show_courses_button">
+          <property name="styleSheet">
+           <string notr="true">QPushButton
+{
+	background-color: rgb(64, 66, 226);
+	color: rgb(255, 255, 255);
+}
+QPushButton::hover
+{
+	background-color: rgb(0, 170, 0);
+}</string>
+          </property>
+          <property name="text">
+           <string>Show Courses</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="horizontalLayoutWidget_11">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>410</y>
+       <width>461</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_11">
+      <item>
+       <widget class="QRadioButton" name="attendance_info_roll_number_radio_box">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Roll Number</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="attendance_info_full_name_radio_box">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Full Name</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="attendance_info_status_radio_box">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Status</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="attendance_info_course_radio_box">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Course</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="horizontalLayoutWidget_12">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>370</y>
+       <width>461</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_12">
+      <item>
+       <widget class="QLabel" name="label_23">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="attendance_info_search_line_edit"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QPushButton" name="attendance_info_search_button">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>470</y>
+       <width>75</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton
+{
+	background-color: rgb(64, 66, 226);
+	color: rgb(255, 255, 255);
+}
+QPushButton::hover
+{
+	background-color: rgb(0, 170, 0);
+}</string>
+     </property>
+     <property name="text">
+      <string>Search</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="verticalLayoutWidget_8">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>430</y>
+       <width>160</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_16">
+      <item>
+       <widget class="QLabel" name="label_21">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <pointsize>10</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Course</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="attendance_info_course_combo_box"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="Line" name="line">
+     <property name="geometry">
+      <rect>
+       <x>510</x>
+       <y>340</y>
+       <width>20</width>
+       <height>281</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+    <widget class="Line" name="line_2">
+     <property name="geometry">
+      <rect>
+       <x>-3</x>
+       <y>520</y>
+       <width>521</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
     </widget>
    </widget>
   </widget>

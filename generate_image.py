@@ -1,7 +1,6 @@
 import cv2
 import os
-cascade_path = 'C:\\Users\\LENOVO\\PycharmProjects\\face_recognition_ui\\venv\\' \
-               'Lib\\site-packages\\cv2\\data\\haarcascade_frontalface_alt.xml'
+cascade_path = 'venv\\Lib\\site-packages\\cv2\\data\\haarcascade_frontalface_alt.xml'
 face_cascade = cv2.CascadeClassifier(cascade_path)
 
 
@@ -43,7 +42,6 @@ def generate_photo(roll_no, full_name, department_name, year, sem):
         return is_success
     except Exception as err:
         print('failed: '+err)
-
 
 
 

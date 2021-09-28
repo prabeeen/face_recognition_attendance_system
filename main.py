@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QMessageBox, QStackedWidget, QTextEdit, \
-    QComboBox, QDateEdit, QTableWidget, QTableWidgetItem, QLabel
+    QComboBox, QDateEdit, QTableWidget, QTableWidgetItem, QLabel, QRadioButton
 # For changing Pydate to Qdate
 from PyQt5.QtCore import QDate
 
@@ -14,6 +14,8 @@ import database_connection_test
 import mysql.connector as ms
 import generate_image
 from datetime import date
+
+from openpyxl import Workbook
 
 
 class DashboardForm(QWidget):
@@ -113,9 +115,29 @@ class DashboardForm(QWidget):
 
         # Find the elements in attendance info:
         self.attendance_table = self.findChild(QTableWidget, 'attendance_table')
+        self.attendance_info_save_all_button = self.findChild(QPushButton, 'attendance_info_save_all_button')
+        self.attendance_info_search_line_edit = self.findChild(QLineEdit, 'attendance_info_search_line_edit')
+        self.attendance_info_roll_number_radio_box = self.findChild(QRadioButton,
+                                                                    'attendance_info_roll_number_radio_box')
+        self.attendance_info_full_name_radio_box = self.findChild(QRadioButton, 'attendance_info_full_name_radio_box')
+        self.attendance_info_status_radio_box = self.findChild(QRadioButton, 'attendance_info_status_radio_box')
+        self.attendance_info_course_radio_box = self.findChild(QRadioButton, 'attendance_info_course_radio_box')
+        self.attendance_info_search_button = self.findChild(QPushButton, 'attendance_info_search_button')
+
+        self.attendance_info_department_combo_box = self.findChild(QComboBox, 'attendance_info_department_combo_box')
+        self.attendance_info_year_combo_box = self.findChild(QComboBox, 'attendance_info_year_combo_box')
+        self.attendance_info_semester_combo_box = self.findChild(QComboBox, 'attendance_info_semester_combo_box')
+        self.attendance_info_course_combo_box = self.findChild(QComboBox, 'attendance_info_course_combo_box')
+        self.attendance_info_export_button = self.findChild(QPushButton, 'attendance_info_export_button')
+        self.attendance_info_show_courses_button = self.findChild(QPushButton, 'attendance_info_show_courses_button')
 
         # Find the elements in notify parent page:
         self.notify_table = self.findChild(QTableWidget, 'notify_table')
+        self.notify_guardian_roll_no_radio_button = self.findChild(QRadioButton, 'notify_guardian_roll_no_radio_button')
+        self.notify_guardian_full_name_radio_button = self.findChild(QRadioButton,
+                                                                     'notify_guardian_full_name_radio_button')
+        self.notify_guardian_search_button = self.findChild(QPushButton, 'notify_guardian_search_button')
+
 
         # Signals generated in student info page
         self.save_button.clicked.connect(self.save_info)
@@ -133,6 +155,13 @@ class DashboardForm(QWidget):
 
         # signals generated in notify guardian page
         self.notify_table.cellClicked.connect(self.notify_table_cell_clicked)
+        self.notify_guardian_search_button.clicked.connect(self.search_notify)
+
+        # signal generated in attendance info page
+        self.attendance_info_save_all_button.clicked.connect(self.save_all_info)
+        self.attendance_info_search_button.clicked.connect(self.search_attendance)
+        self.attendance_info_export_button.clicked.connect(self.export_attendance)
+        self.attendance_info_show_courses_button.clicked.connect(self.show_courses_attendance)
 
         # Display table value on start up
         self.refresh_info()
@@ -144,6 +173,9 @@ class DashboardForm(QWidget):
 
         # Disable course combo box
         self.recognize_course_combo_box.setEnabled(False)
+
+        # Disable course combo box of attendance info
+        self.attendance_info_course_combo_box.setEnabled(False)
 
     # Student info page functions:
 
@@ -384,14 +416,18 @@ class DashboardForm(QWidget):
                     if id_no == 'NULL' or name == 'Unknown':
                         QMessageBox.information(self, self.messagebox_title, "Sorry please try again.")
                     else:
-                        message_confirm = QMessageBox.question(self, self.messagebox_title, "Name: %s\nRoll: %s" % (name,
-                                                                id_no), QMessageBox.Yes | QMessageBox.No)
+                        message_confirm = QMessageBox.question(self, self.messagebox_title, "Name: %s\nRoll: %s" %
+                                                               (name, id_no), QMessageBox.Yes | QMessageBox.No)
                         if message_confirm == QMessageBox.Yes:
-                            database_connection_test.attendance_add(id_no, course, date)
-                            QMessageBox.information(self, self.messagebox_title, "Your attendance is taken successfully.")
+                            handle_duplicate = database_connection_test.add_attendance(id_no, course, date)
+                            if type(handle_duplicate) == ms.errors.IntegrityError:
+                                QMessageBox.information(self, self.messagebox_title, "Looks like your attendance is "
+                                                                                     "already taken.")
+                            else:
+                                QMessageBox.information(self, self.messagebox_title, "Your attendance is taken "
+                                                                                     "successfully.")
                         else:
                             QMessageBox.information(self, self.messagebox_title, "Sorry please try again.")
-
                 except Exception as e:
                     print("error")
                     print(f'{e}')
@@ -434,8 +470,10 @@ class DashboardForm(QWidget):
             self.notify_table.setRowCount(0);
             conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_database')
             cursor = conn.cursor()
+            # query = "SELECT roll_no, full_name, course, attendance_date, attendance_status" \
+            #         " FROM attendance_view WHERE attendance_date=CURDATE() AND attendance_status='A'"
             query = "SELECT roll_no, full_name, course, attendance_date, attendance_status" \
-                    " FROM attendance_view WHERE attendance_date=CURDATE() AND attendance_status='A'"
+                    " FROM attendance_final_view WHERE attendance_status='A'"
             cursor.execute(query)
             result = cursor.fetchall()
             for row_number, row_data in enumerate(result):
@@ -478,11 +516,36 @@ class DashboardForm(QWidget):
             query = "SELECT parent_email FROM student_table WHERE roll_no = %s" % value
             cursor.execute(query)
             result = cursor.fetchall()
-            print(result)
             self.to_line_edit.setText(result[0][0])
         except Exception as err:
             print(f"Error: {err}")
 
+    def search_notify(self):
+        search_value = '%' + self.notify_guardian_search_line_edit.text() + '%'
+        selected_radio = ''
+        if self.notify_guardian_roll_no_radio_button.isChecked():
+            selected_radio = 'roll_no'
+        elif self.notify_guardian_full_name_radio_button.isChecked():
+            selected_radio = 'full_name'
+        if selected_radio == '':
+            QMessageBox.information(self, self.messagebox_title, "Please select one of the radio boxes.")
+        else:
+            try:
+                self.notify_table.setRowCount(0);
+                conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_database')
+                cursor = conn.cursor()
+                query = "SELECT roll_no, full_name, course, attendance_date, attendance_status" \
+                        " FROM attendance_final_view WHERE attendance_status='A' AND %s LIKE '%s'" % \
+                        (selected_radio, search_value)
+                cursor.execute(query)
+                result = cursor.fetchall()
+                for row_number, row_data in enumerate(result):
+                    self.notify_table.insertRow(row_number)
+                    for column_number, data in enumerate(row_data):
+                        self.notify_table.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+                conn.close()
+            except Exception as err:
+                print(f"Error: {err}")
 
     # Attendance Report page functions:
     def open_attendance_report_page(self):
@@ -492,22 +555,23 @@ class DashboardForm(QWidget):
     def open_attendance_info_page(self):
         self.stack_pages.setCurrentWidget(self.stack_pages_attendance_info_page)
         try:
-            self.attendance_table.setRowCount(0);
+            date_value = self.recognize_date_value.text()
+            self.attendance_table.setRowCount(0)
             conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_database')
             cursor = conn.cursor()
-            query = "CREATE VIEW attendance_final_view AS "\
+            query = "CREATE OR REPLACE VIEW attendance_final_view AS "\
                     "SELECT st.roll_no, st.full_name, st.department_name, st.year, st.semester, dt.course, "\
-                    "IFNULL(at.attendance_date,CURDATE()) AS attendance_date, IFNULL(at.attendance_status,'A') "\
+                    "IFNULL(at.attendance_date,'%s') AS attendance_date, IFNULL(at.attendance_status,'A') "\
                     "AS attendance_status "\
                     "FROM student_table AS st "\
                     "INNER JOIN department_table AS dt "\
                     "ON st.department_name = dt.department_name AND "\
                     "st.year = dt.year AND st.semester = dt.semester "\
                     "LEFT JOIN attendance_table AS at "\
-                    "ON st.roll_no = at.roll_no AND dt.course = at.course"
-            # cursor.execute(query)
-            # cursor.commit()
-            query = "SELECT * FROM attendance_view"
+                    "ON st.roll_no = at.roll_no AND dt.course = at.course" % date_value
+            cursor.execute(query)
+            conn.commit()
+            query = "SELECT * FROM attendance_final_view"
             cursor.execute(query)
             result = cursor.fetchall()
             for row_number, row_data in enumerate(result):
@@ -517,6 +581,126 @@ class DashboardForm(QWidget):
             conn.close()
         except Exception as err:
             print(f"Error: {err}")
+
+    def save_all_info(self):
+        # Getting all values from view
+        try:
+            conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_database')
+            cursor = conn.cursor()
+            query = "SELECT * FROM attendance_final_view"
+            cursor.execute(query)
+            result = cursor.fetchall()
+
+            # Adding datas of view to the attendance complete table
+            handle_duplicate = database_connection_test.save_to_complete_table(result)
+            if type(handle_duplicate) == ms.errors.IntegrityError:
+                QMessageBox.information(self, self.messagebox_title, "Looks like data is already saved.")
+            else:
+                QMessageBox.information(self, self.messagebox_title, "saved  "
+                                                                     "successfully.")
+                # Droping view
+                query = "DROP VIEW attendance_final_view"
+                cursor.execute(query)
+                conn.commit()
+
+                # Removing data from attendance table
+                query = "TRUNCATE TABLE attendance_table"
+                cursor.execute(query)
+                conn.commit()
+
+            conn.close()
+        except Exception as err:
+            print("ERROR: "+err.message)
+
+    def search_attendance(self):
+        search_value = '%'+self.attendance_info_search_line_edit.text()+'%'
+        selected_radio = ''
+        if self.attendance_info_roll_number_radio_box.isChecked():
+            selected_radio = 'roll_no'
+        elif self.attendance_info_full_name_radio_box.isChecked():
+            selected_radio = 'full_name'
+        elif self.attendance_info_status_radio_box.isChecked():
+            selected_radio = 'attendance_status'
+        elif self.attendance_info_course_radio_box.isChecked():
+            selected_radio = 'course'
+        if selected_radio == '':
+            QMessageBox.information(self, self.messagebox_title, "Please select one of the radio boxes.")
+        else:
+            try:
+                self.attendance_table.setRowCount(0);
+                conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_database')
+                cursor = conn.cursor()
+                query = "SELECT * FROM attendance_final_view WHERE %s LIKE '%s'" % (selected_radio, search_value)
+                cursor.execute(query)
+                result = cursor.fetchall()
+                for row_number, row_data in enumerate(result):
+                    self.attendance_table.insertRow(row_number)
+                    for column_number, data in enumerate(row_data):
+                        self.attendance_table.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+                conn.close()
+            except Exception as err:
+                print(f"Error: {err}")
+
+    def show_courses_attendance(self):
+        attendance_department = self.attendance_info_department_combo_box.currentText()
+        attendance_year = self.attendance_info_year_combo_box.currentText()
+        attendance_semester = self.attendance_info_semester_combo_box.currentText()
+        values_list = [attendance_department, attendance_year, attendance_semester]
+        if attendance_department and attendance_year and attendance_semester:
+            self.attendance_info_course_combo_box.setEnabled(True)
+            is_complete, values = database_connection_test.get_course(values_list)
+            if is_complete:
+                self.attendance_info_course_combo_box.clear()
+                for course in values:
+                    self.attendance_info_course_combo_box.addItem(course[0])
+            else:
+                QMessageBox.information(self, self.messagebox_title, "Something Went Wrong")
+
+        else:
+            QMessageBox.information(self, self.messagebox_title, "Please select Department, year and " \
+                                                                 "semester field first.")
+
+    def export_attendance(self):
+        date_value = self.recognize_date_value.text()
+        attendance_course = self.attendance_info_course_combo_box.currentText()
+        attendance_department = self.attendance_info_department_combo_box.currentText()
+        attendance_year = self.attendance_info_year_combo_box.currentText()
+        attendance_semester = self.attendance_info_semester_combo_box.currentText()
+        if attendance_department and attendance_year and attendance_semester and attendance_course:
+            excel_path = 'excel\\'+attendance_department+'\\'+attendance_year+'\\'+attendance_semester+'\\'+\
+                         attendance_course+'\\'
+            if not os.path.exists(excel_path):
+                os.makedirs(excel_path)
+
+            # Getting data from view
+            try:
+                conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_database')
+                cursor = conn.cursor()
+                query = "SELECT * FROM attendance_final_view WHERE department_name = '%s' AND year = '%s' AND " \
+                        "semester = '%s' AND course = '%s'" % (attendance_department, attendance_year,
+                                                                attendance_semester, attendance_course)
+                cursor.execute(query)
+                result = cursor.fetchall()
+                conn.close()
+
+                # Export as xml file
+                dest_file = excel_path + date_value + '.xlsx'
+                work_book = Workbook()
+                work_sheet = work_book.active
+                # heading
+                heading_list = ['Roll No', 'Full Name', 'Department Name', 'Year', 'Semester', 'Course', 'Date',
+                                'Status']
+                work_sheet.append(heading_list)
+                for row in result:
+                    work_sheet.append(row)
+                work_book.save(dest_file)
+
+            except Exception as err:
+                print(f"Error: {err}")
+
+        else:
+            QMessageBox.information(self, self.messagebox_title, "Please select the required fields.")
+        self.attendance_info_course_combo_box.setEnabled(False)
 
 
 if __name__ == '__main__':
