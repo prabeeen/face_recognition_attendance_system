@@ -131,17 +131,17 @@ class Ui_MainWindow(object):
         font.setPointSize(12)
         self.login_password_line_edit.setFont(font)
         self.login_password_line_edit.setObjectName("login_password_line_edit")
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(150, 430, 181, 57))
+        self.login_push_button = QtWidgets.QPushButton(self.centralwidget)
+        self.login_push_button.setGeometry(QtCore.QRect(150, 430, 181, 57))
         font = QtGui.QFont()
         font.setFamily("Montserrat")
         font.setPointSize(16)
         font.setBold(True)
         font.setItalic(True)
         font.setWeight(75)
-        self.pushButton.setFont(font)
-        self.pushButton.setMouseTracking(False)
-        self.pushButton.setStyleSheet("QPushButton::hover\n"
+        self.login_push_button.setFont(font)
+        self.login_push_button.setMouseTracking(False)
+        self.login_push_button.setStyleSheet("QPushButton::hover\n"
 "{\n"
 "    background-color: rgb(0, 170, 0);\n"
 "}\n"
@@ -152,8 +152,8 @@ class Ui_MainWindow(object):
 "    color: rgb(255, 255, 255);\n"
 "    border-radius:25;\n"
 "}")
-        self.pushButton.setFlat(False)
-        self.pushButton.setObjectName("pushButton")
+        self.login_push_button.setFlat(False)
+        self.login_push_button.setObjectName("login_push_button")
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
         self.label_5.setGeometry(QtCore.QRect(102, 25, 921, 37))
         font = QtGui.QFont()
@@ -177,7 +177,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label_3.setText(_translate("MainWindow", "USERNAME:"))
         self.label.setText(_translate("MainWindow", "PASSWORD:"))
-        self.pushButton.setText(_translate("MainWindow", "LOGIN"))
+        self.login_push_button.setText(_translate("MainWindow", "LOGIN"))
         self.label_5.setText(_translate("MainWindow", "FACE RECOGNITION ATTENDANCE SYSTEM"))
 
 

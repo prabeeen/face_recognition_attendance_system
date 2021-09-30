@@ -123,15 +123,15 @@ class Ui_Form(object):
 "}")
         self.pushButton_6.setFlat(False)
         self.pushButton_6.setObjectName("pushButton_6")
-        self.pushButton_7 = QtWidgets.QPushButton(self.frame)
-        self.pushButton_7.setGeometry(QtCore.QRect(0, 563, 235, 60))
+        self.logout_button = QtWidgets.QPushButton(self.frame)
+        self.logout_button.setGeometry(QtCore.QRect(0, 563, 235, 60))
         font = QtGui.QFont()
         font.setFamily("Montserrat Black")
         font.setPointSize(16)
         font.setBold(True)
         font.setWeight(75)
-        self.pushButton_7.setFont(font)
-        self.pushButton_7.setStyleSheet("QPushButton\n"
+        self.logout_button.setFont(font)
+        self.logout_button.setStyleSheet("QPushButton\n"
 "{\n"
 "    background-color: rgb(64, 66, 226);\n"
 "    color: rgb(255, 255, 255);\n"
@@ -140,8 +140,8 @@ class Ui_Form(object):
 "{\n"
 "    background-color:rgb(255, 0, 0);\n"
 "}")
-        self.pushButton_7.setFlat(False)
-        self.pushButton_7.setObjectName("pushButton_7")
+        self.logout_button.setFlat(False)
+        self.logout_button.setObjectName("logout_button")
         self.pushButton_5 = QtWidgets.QPushButton(self.frame)
         self.pushButton_5.setGeometry(QtCore.QRect(0, 350, 235, 60))
         font = QtGui.QFont()
@@ -857,12 +857,115 @@ class Ui_Form(object):
         self.stackedWidget.addWidget(self.notify_guardian_page)
         self.attendance_report_page = QtWidgets.QWidget()
         self.attendance_report_page.setObjectName("attendance_report_page")
-        self.label_7 = QtWidgets.QLabel(self.attendance_report_page)
-        self.label_7.setGeometry(QtCore.QRect(380, 260, 291, 111))
+        self.attendance_report_bar_button = QtWidgets.QPushButton(self.attendance_report_page)
+        self.attendance_report_bar_button.setGeometry(QtCore.QRect(440, 120, 140, 45))
         font = QtGui.QFont()
-        font.setPointSize(20)
-        self.label_7.setFont(font)
+        font.setFamily("Arial")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.attendance_report_bar_button.setFont(font)
+        self.attendance_report_bar_button.setStyleSheet("QPushButton\n"
+"{\n"
+"    background-color: rgb(64, 66, 226);\n"
+"    color: rgb(255, 255, 255);\n"
+"}\n"
+"QPushButton::hover\n"
+"{\n"
+"    background-color: rgb(0, 170, 0);\n"
+"}")
+        self.attendance_report_bar_button.setObjectName("attendance_report_bar_button")
+        self.attendance_report_pie_button = QtWidgets.QPushButton(self.attendance_report_page)
+        self.attendance_report_pie_button.setGeometry(QtCore.QRect(440, 470, 140, 45))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.attendance_report_pie_button.setFont(font)
+        self.attendance_report_pie_button.setStyleSheet("QPushButton\n"
+"{\n"
+"    background-color: rgb(64, 66, 226);\n"
+"    color: rgb(255, 255, 255);\n"
+"}\n"
+"QPushButton::hover\n"
+"{\n"
+"    background-color: rgb(0, 170, 0);\n"
+"}")
+        self.attendance_report_pie_button.setObjectName("attendance_report_pie_button")
+        self.horizontalLayoutWidget_14 = QtWidgets.QWidget(self.attendance_report_page)
+        self.horizontalLayoutWidget_14.setGeometry(QtCore.QRect(250, 310, 541, 61))
+        self.horizontalLayoutWidget_14.setObjectName("horizontalLayoutWidget_14")
+        self.horizontalLayout_14 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_14)
+        self.horizontalLayout_14.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_14.setObjectName("horizontalLayout_14")
+        self.verticalLayout_19 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_19.setObjectName("verticalLayout_19")
+        self.label_7 = QtWidgets.QLabel(self.horizontalLayoutWidget_14)
         self.label_7.setObjectName("label_7")
+        self.verticalLayout_19.addWidget(self.label_7)
+        self.attendance_report_department_combo_box = QtWidgets.QComboBox(self.horizontalLayoutWidget_14)
+        self.attendance_report_department_combo_box.setObjectName("attendance_report_department_combo_box")
+        self.attendance_report_department_combo_box.addItem("")
+        self.attendance_report_department_combo_box.setItemText(0, "")
+        self.attendance_report_department_combo_box.addItem("")
+        self.attendance_report_department_combo_box.addItem("")
+        self.attendance_report_department_combo_box.addItem("")
+        self.attendance_report_department_combo_box.addItem("")
+        self.verticalLayout_19.addWidget(self.attendance_report_department_combo_box)
+        self.horizontalLayout_14.addLayout(self.verticalLayout_19)
+        self.verticalLayout_20 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_20.setObjectName("verticalLayout_20")
+        self.label_24 = QtWidgets.QLabel(self.horizontalLayoutWidget_14)
+        self.label_24.setObjectName("label_24")
+        self.verticalLayout_20.addWidget(self.label_24)
+        self.attendance_report_year_combo_box = QtWidgets.QComboBox(self.horizontalLayoutWidget_14)
+        self.attendance_report_year_combo_box.setObjectName("attendance_report_year_combo_box")
+        self.attendance_report_year_combo_box.addItem("")
+        self.attendance_report_year_combo_box.setItemText(0, "")
+        self.attendance_report_year_combo_box.addItem("")
+        self.attendance_report_year_combo_box.addItem("")
+        self.attendance_report_year_combo_box.addItem("")
+        self.attendance_report_year_combo_box.addItem("")
+        self.verticalLayout_20.addWidget(self.attendance_report_year_combo_box)
+        self.horizontalLayout_14.addLayout(self.verticalLayout_20)
+        self.verticalLayout_22 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_22.setObjectName("verticalLayout_22")
+        self.label_26 = QtWidgets.QLabel(self.horizontalLayoutWidget_14)
+        self.label_26.setObjectName("label_26")
+        self.verticalLayout_22.addWidget(self.label_26)
+        self.attendance_report_semester_combo_box = QtWidgets.QComboBox(self.horizontalLayoutWidget_14)
+        self.attendance_report_semester_combo_box.setObjectName("attendance_report_semester_combo_box")
+        self.attendance_report_semester_combo_box.addItem("")
+        self.attendance_report_semester_combo_box.setItemText(0, "")
+        self.attendance_report_semester_combo_box.addItem("")
+        self.attendance_report_semester_combo_box.addItem("")
+        self.verticalLayout_22.addWidget(self.attendance_report_semester_combo_box)
+        self.horizontalLayout_14.addLayout(self.verticalLayout_22)
+        self.verticalLayoutWidget_11 = QtWidgets.QWidget(self.attendance_report_page)
+        self.verticalLayoutWidget_11.setGeometry(QtCore.QRect(440, 390, 141, 51))
+        self.verticalLayoutWidget_11.setObjectName("verticalLayoutWidget_11")
+        self.verticalLayout_21 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_11)
+        self.verticalLayout_21.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_21.setObjectName("verticalLayout_21")
+        self.label_25 = QtWidgets.QLabel(self.verticalLayoutWidget_11)
+        self.label_25.setObjectName("label_25")
+        self.verticalLayout_21.addWidget(self.label_25)
+        self.attendance_report_course_combo_box = QtWidgets.QComboBox(self.verticalLayoutWidget_11)
+        self.attendance_report_course_combo_box.setObjectName("attendance_report_course_combo_box")
+        self.verticalLayout_21.addWidget(self.attendance_report_course_combo_box)
+        self.attendance_report_show_courses_button = QtWidgets.QPushButton(self.attendance_report_page)
+        self.attendance_report_show_courses_button.setGeometry(QtCore.QRect(810, 322, 91, 31))
+        self.attendance_report_show_courses_button.setStyleSheet("QPushButton\n"
+"{\n"
+"    background-color: rgb(64, 66, 226);\n"
+"    color: rgb(255, 255, 255);\n"
+"}\n"
+"QPushButton::hover\n"
+"{\n"
+"    background-color: rgb(0, 170, 0);\n"
+"}")
+        self.attendance_report_show_courses_button.setObjectName("attendance_report_show_courses_button")
         self.stackedWidget.addWidget(self.attendance_report_page)
         self.recognize_face_page = QtWidgets.QWidget()
         self.recognize_face_page.setObjectName("recognize_face_page")
@@ -1317,7 +1420,7 @@ class Ui_Form(object):
         self.stackedWidget.addWidget(self.attendance_info_page)
 
         self.retranslateUi(Form)
-        self.stackedWidget.setCurrentIndex(6)
+        self.stackedWidget.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -1327,7 +1430,7 @@ class Ui_Form(object):
         self.pushButton_2.setText(_translate("Form", "TRAIN DATA"))
         self.pushButton_3.setText(_translate("Form", "PHOTO"))
         self.pushButton_6.setText(_translate("Form", "ATTENDANCE REPORT"))
-        self.pushButton_7.setText(_translate("Form", "LOGOUT"))
+        self.logout_button.setText(_translate("Form", "LOGOUT"))
         self.pushButton_5.setText(_translate("Form", "NOTIFY GUARDIAN"))
         self.pushButton_4.setText(_translate("Form", "RECOGNIZE FACE"))
         self.pushButton_9.setText(_translate("Form", "ATTENDANCE INFO"))
@@ -1441,7 +1544,23 @@ class Ui_Form(object):
         self.notify_guardian_roll_no_radio_button.setText(_translate("Form", "Roll No"))
         self.notify_guardian_full_name_radio_button.setText(_translate("Form", "Full Name"))
         self.notify_guardian_search_button.setText(_translate("Form", "Search"))
-        self.label_7.setText(_translate("Form", "ATTENDANCE REPORT"))
+        self.attendance_report_bar_button.setText(_translate("Form", "Display bar-chart"))
+        self.attendance_report_pie_button.setText(_translate("Form", "Display pie-chart"))
+        self.label_7.setText(_translate("Form", "Department"))
+        self.attendance_report_department_combo_box.setItemText(1, _translate("Form", "Computer Engineering"))
+        self.attendance_report_department_combo_box.setItemText(2, _translate("Form", "Civil Engineering"))
+        self.attendance_report_department_combo_box.setItemText(3, _translate("Form", "IT Engineering"))
+        self.attendance_report_department_combo_box.setItemText(4, _translate("Form", "Software Engineering"))
+        self.label_24.setText(_translate("Form", "Year"))
+        self.attendance_report_year_combo_box.setItemText(1, _translate("Form", "1"))
+        self.attendance_report_year_combo_box.setItemText(2, _translate("Form", "2"))
+        self.attendance_report_year_combo_box.setItemText(3, _translate("Form", "3"))
+        self.attendance_report_year_combo_box.setItemText(4, _translate("Form", "4"))
+        self.label_26.setText(_translate("Form", "Semester"))
+        self.attendance_report_semester_combo_box.setItemText(1, _translate("Form", "1"))
+        self.attendance_report_semester_combo_box.setItemText(2, _translate("Form", "2"))
+        self.label_25.setText(_translate("Form", "Course"))
+        self.attendance_report_show_courses_button.setText(_translate("Form", "Show Courses"))
         self.recognize_face_button.setText(_translate("Form", "RECOGNIZE FACES"))
         self.label_16.setText(_translate("Form", "Department:"))
         self.recognize_department_combo_box.setItemText(1, _translate("Form", "Computer Engineering"))

@@ -333,7 +333,7 @@
      </font>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="login_push_button">
     <property name="geometry">
      <rect>
       <x>150</x>

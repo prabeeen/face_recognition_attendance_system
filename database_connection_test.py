@@ -16,8 +16,7 @@ def insert_data(values_list):
         return is_success
     except ms.Error as err:
         print(f'Error: {err}')
-        conn.close()
-        return is_success
+        return err
 
 
 def update_data(values_list):
@@ -36,8 +35,7 @@ def update_data(values_list):
         return is_success
     except ms.Error as err:
         print(f'Error: {err}')
-        conn.close()
-        return is_success
+        return err
 
 
 def delete_data(roll):
@@ -53,12 +51,10 @@ def delete_data(roll):
         return is_success
     except ms.Error as err:
         print(f'Error: {err}')
-        conn.close()
-        return is_success
+        return err
 
 
 def get_course(values_list):
-    is_success = False
     try:
         conn = ms.connect(host='localhost', user='root', password='', database='face_recognition_database')
         cursor = conn.cursor()
@@ -67,12 +63,10 @@ def get_course(values_list):
         cursor.execute(query)
         result = cursor.fetchall()
         conn.close()
-        is_success = True
-        return is_success, result
+        return result
     except ms.Error as err:
         print(f'Error: {err}')
-        conn.close()
-        return is_success
+        return err
 
 
 def add_attendance(roll, course, date):
@@ -88,7 +82,6 @@ def add_attendance(roll, course, date):
         return is_success
     except ms.Error as err:
         print(f'Error: {err}')
-        conn.close()
         return err
 
 
@@ -104,6 +97,5 @@ def save_to_complete_table(result):
         conn.close()
     except ms.Error as err:
         print(f'Error here: {err}')
-        conn.close()
         return err
 
