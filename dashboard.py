@@ -1427,7 +1427,7 @@ class Ui_Form(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
         self.pushButton.setText(_translate("Form", "STUDENT INFO"))
-        self.pushButton_2.setText(_translate("Form", "TRAIN DATA"))
+        self.pushButton_2.setText(_translate("Form", "TRAIN MODEL"))
         self.pushButton_3.setText(_translate("Form", "PHOTO"))
         self.pushButton_6.setText(_translate("Form", "ATTENDANCE REPORT"))
         self.logout_button.setText(_translate("Form", "LOGOUT"))

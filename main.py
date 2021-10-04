@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QMess
 # For changing Pydate to Qdate
 from PyQt5.QtCore import QDate
 from PyQt5.QtGui import QIntValidator
+from PyQt5 import QtGui
 
 import send2trash
 import shutil
@@ -399,7 +400,7 @@ class DashboardForm(QWidget):
         semester = self.semester_combo_box.currentText()
         if roll_no and full_name and department and year and semester:
             is_complete = generate_image.generate_photo(roll_no, full_name.title(), department, year, semester)
-            if is_complete == True:
+            if is_complete:
                 QMessageBox.information(self, self.messagebox_title,
                                         "Sample photo taken successfully.")
                 self.reset_info()
@@ -408,8 +409,7 @@ class DashboardForm(QWidget):
             else:
                 QMessageBox.critical(self, self.messagebox_title, str(is_complete))
         else:
-            QMessageBox.critical(self, self.messagebox_title,
-                                    "Please fill above information first.")
+            QMessageBox.critical(self, self.messagebox_title, "Please fill above information first.")
 
     def refresh_info(self):
         try:
@@ -637,12 +637,15 @@ class DashboardForm(QWidget):
 
             if not is_empty:
                 send = smtp_email.SendEmail(receiver_email, subject, main_body)
-                send.send_email()
-                QMessageBox.information(self, 'Face Recognition Attendance System',
-                                        'The mail has been sent successfully!')
-                self.to_line_edit.setText('')
-                self.subject_line_edit.setText('')
-                self.mail_content_edit.setPlainText('')
+                value = send.send_email()
+                if value == True:
+                    QMessageBox.information(self, 'Face Recognition Attendance System',
+                                            'The mail has been sent successfully!')
+                    self.to_line_edit.setText('')
+                    self.subject_line_edit.setText('')
+                    self.mail_content_edit.setPlainText('')
+                else:
+                    QMessageBox.critical(self, self.messagebox_title, str(value))
         except Exception as e:
             QMessageBox.critical(self, self.messagebox_title, str(e))
 
@@ -966,6 +969,7 @@ if __name__ == '__main__':
     stacked_widget.addWidget(login_window)
     stacked_widget.setStyleSheet("background-color: rgb(220, 228, 254)")
     stacked_widget.setWindowTitle("FRAS")
+    stacked_widget.setWindowIcon(QtGui.QIcon("face_recognition_icon.jpg"))
     stacked_widget.setFixedWidth(1360)
     stacked_widget.setFixedHeight(760)
     stacked_widget.show()

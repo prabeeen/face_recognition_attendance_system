@@ -42,7 +42,7 @@ def generate_photo(roll_no, full_name, department_name, year, sem):
         return is_success
     except Exception as err:
         print('failed: '+err)
-        return err
+        return is_success
 
 
 

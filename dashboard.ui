@@ -167,7 +167,7 @@ QPushButton::hover
 }</string>
     </property>
     <property name="text">
-     <string>TRAIN DATA</string>
+     <string>TRAIN MODEL</string>
     </property>
     <property name="flat">
      <bool>false</bool>
